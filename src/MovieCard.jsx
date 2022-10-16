@@ -1,6 +1,7 @@
 import style from "./MovieCard.module.css";
 
 function MovieCard({ movie }) {
+  // https://www.pexels.com/api/ - API for images (free)
   const imageUrl = "https://image.tmdb.org/t/p/w300" + movie.poster_path;
   return (
     <li className={style.movieCard}>
