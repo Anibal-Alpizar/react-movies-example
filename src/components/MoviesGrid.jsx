@@ -1,17 +1,16 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { get } from "../utils/httpClient";
 import MovieCard from "./MovieCard";
-import movies from "./movies.json";
 import styles from "./MoviesGrid.module.css";
 
 function MoviesGrid() {
-  useEffect(() => [
-    fetch("/discover/movie", {
-      headers: {
-        Authorization: "Bearer",
-        "Content-Type": "application/json;charset=utf-8",
-      },
-    }),
-  ]);
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    get("/discover/movie").then((data) => {
+      setMovies(data.results);
+    });
+  }, []);
   return (
     <ul className={styles.moviesGrid}>
       {movies.map((movie) => (
@@ -20,5 +19,4 @@ function MoviesGrid() {
     </ul>
   );
 }
-
 export default MoviesGrid;

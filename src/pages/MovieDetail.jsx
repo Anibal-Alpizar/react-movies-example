@@ -1,29 +1,44 @@
-import movie from "./movie.json";
-import style from "./MovieDetail.module.css";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { get } from "../utils/httpClient";
+import styles from "./MovieDetail.module.css";
 
 function MovieDetail() {
+  const { movieId } = useParams();
+  const [movie, setMovie] = useState(null);
+
+  useEffect(() => {
+    get("/movies/" + movieId).then((data) => {
+      setMovie(data);
+    });
+  }, [movieId]);
+
+  if (!movie) {
+    return null;
+  }
   const imageUrl = "https://image.tmdb.org/t/p/w500" + movie.poster_path;
 
   return (
-    <div className={style.detailContainer}>
+    <div className={styles.detailsContainer}>
       <img
-        className={`${style.col} ${style.movieImage}`}
+        className={`${styles.col} ${styles.movieImage}`}
         src={imageUrl}
         alt={movie.title}
       />
-      <div className={`${style.col} ${style.movieDetails}`}>
-        <p className={style.firstItem}>
-          <strong> Title: {movie.title} </strong>
+      <div className={`${styles.col} ${styles.movieDetails}`}>
+        <p className={styles.firstItem}>
+          <strong>Title:</strong> {movie.title}
         </p>
         <p>
-          <strong> Description: {movie.overview} </strong>
+          <strong>Genres:</strong>{" "}
+          {movie.genres.map((genre) => genre.name).join(", ")}
         </p>
-        <strong>Genres: </strong>
-        {movie.genres.map((genre) => genre.name).join(", ")}
+        <p>
+          <strong>Description:</strong> {movie.overview}
+        </p>
       </div>
     </div>
   );
-  Z;
 }
 
 export default MovieDetail;
